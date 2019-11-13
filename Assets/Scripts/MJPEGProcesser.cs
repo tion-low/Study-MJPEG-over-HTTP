@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using UnityEngine;
 
 public class MJPEGProcesser {
     private readonly byte [] jpegHeader = new byte[] { 0xff, 0xd8 };
@@ -32,15 +33,19 @@ public class MJPEGProcesser {
     private void OnGetResponse(IAsyncResult result)
     {
         _responseReceived = true;
+        Debug.Log("OnGetResponse");
         byte [] imageBuffer = new byte[1024 * 1024];
         HttpWebRequest request = (HttpWebRequest) result.AsyncState;
 
+        Debug.Log("Starting request");
         try
         {
             HttpWebResponse response = (HttpWebResponse) request.EndGetResponse(result);
+            Debug.Log("response received");
             string contentType = response.Headers["Content-Type"];
             if (!string.IsNullOrEmpty(contentType) && !contentType.Contains("="))
             {
+                Debug.Log("MJPEG Exception thrown");
                 throw new Exception("Invalid content-type header");
             }
 
@@ -91,6 +96,7 @@ public class MJPEGProcesser {
 
                         if (!_isStreamActive)
                         {
+                            Debug.Log("CLOSING");
                             response.Close();
                             break;
                         }

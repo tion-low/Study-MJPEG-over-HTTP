@@ -18,7 +18,7 @@ public class MJPEGTexture : MonoBehaviour
 	{
 		_processer = new MJPEGProcesser(_chunkSize * 1024);
 		_processer.FrameReady += (obj, arg) => { _updateFrame = true; };
-		_processer.Error += (sender, e) => { Debug.Log("error"); };
+		_processer.Error += (sender, e) => { Debug.Log(e.Message); };
 		Uri uri = new Uri(Url);
 		_texture = new Texture2D(_initWidth, _initHeight, TextureFormat.PVRTC_RGB4, false);
 		GetComponent<Renderer>().material.mainTexture = _texture;
